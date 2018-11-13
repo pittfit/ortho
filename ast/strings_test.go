@@ -63,7 +63,7 @@ func TestToStrings(t *testing.T) {
 
 		// Nested Nodes
 		{
-			desc: "Numeric range expansion: Backwards, No Step",
+			desc: "Nested expansions",
 			str:  "ab{c,{d,{0..6..2}}}",
 			root: SequenceNode(
 				TextNode(0, 2),
@@ -87,18 +87,6 @@ func TestToStrings(t *testing.T) {
 				"ab4",
 				"ab6",
 			},
-		},
-		{
-			desc:     "Numeric range expansion: Backwards, Positive Step",
-			str:      "{5..1..2}",
-			root:     NumericRangeNode(TextNode(1, 2), TextNode(4, 5), TextNode(7, 8)),
-			expected: []string{"5", "3", "1"},
-		},
-		{
-			desc:     "Numeric range expansion: Backwards, Negative Step",
-			str:      "{5..1..-2}",
-			root:     NumericRangeNode(TextNode(1, 2), TextNode(4, 5), TextNode(7, 9)),
-			expected: []string{"1", "3", "5"},
 		},
 	}
 
