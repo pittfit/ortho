@@ -33,7 +33,7 @@ func numbersForRange(startBuf []byte, endBuf []byte, stepBuf []byte) ([]int, err
 		return nil, err
 	}
 
-	step = RangeStepNone
+	step = 0
 
 	if len(stepBuf) > 0 {
 		step, err = strconv.Atoi(string(stepBuf))
