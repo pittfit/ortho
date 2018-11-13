@@ -48,13 +48,13 @@ func combinations(lists [][]string) []string {
 		// Move to the next combination by
 		// wrapping around from len() to 0
 		for j := lastListIndex; j >= 0; j-- {
-			// 1. Reset positions for lists that have hit the end
+			// 1. Increment the position of the furthest list that has not hit the end
 			if pos[j] != indexes[j] {
 				pos[j]++
 				break
 			}
 
-			// 2. Increment the position of the furthest list that has not hit the end
+			// 2. Reset positions for lists that have hit the end
 			pos[j] = 0
 		}
 	}
