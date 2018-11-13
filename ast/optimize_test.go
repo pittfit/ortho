@@ -36,15 +36,10 @@ func TestOptimize(t *testing.T) {
 
 	expected := &AST{
 		root: SequenceNode(
-			TextNode(0, 2),
-			TextNode(2, 3),
+			TextNode(0, 3),
 			ListNode(
 				TextNode(3, 4),
-				SequenceNode(
-					TextNode(6, 7),
-					TextNode(7, 8),
-					TextNode(8, 9),
-				),
+				TextNode(6, 9),
 				NumericRangeNode(
 					TextNode(9, 10),
 					TextNode(12, 13),
