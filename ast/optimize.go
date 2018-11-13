@@ -2,8 +2,10 @@ package ast
 
 // Optimize Modifies nodes in the AST to produce a smaller tree with the same semantics
 func (a *AST) Optimize() *AST {
+	root := a.root
+
 	// Walk through the AST
-	newRoot := a.root.visit(func(n Node) Node {
+	root = root.visit(func(n Node) Node {
 		if n.Type != TypeList && n.Type != TypeSequence {
 			return n
 		}
@@ -27,6 +29,6 @@ func (a *AST) Optimize() *AST {
 
 	return &AST{
 		buf:  a.buf,
-		root: newRoot,
+		root: root,
 	}
 }
