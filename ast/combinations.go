@@ -7,8 +7,6 @@ import (
 func combinations(lists [][]string) []string {
 	listCount := len(lists)
 
-	// position in each of the lists
-	// [0, 0, 0, 0, 0, 0]
 	pos := make([]int, listCount)
 	indexes := make([]int, listCount)
 	iterations := 1
@@ -29,39 +27,34 @@ func combinations(lists [][]string) []string {
 	lastListIndex := listCount - 1
 	lastListLastIndex := indexes[lastListIndex]
 
-	// fmt.Printf("Lists: %v\n", lists)
-	// fmt.Printf("Last Indexes: %v\n", indexes)
-
 	var strs []string
 	var sb strings.Builder
 
 	for i := 0; i < iterations; i++ {
-		// fmt.Printf("[i=%v] Positions %v\n", i, pos)
-
-		// Concat the strings from each of the lists based on the current positions
+		// Get the current combination
 		sb.Reset()
 		for j := 0; j < listCount; j++ {
 			sb.WriteString(lists[j][pos[j]])
 		}
 		strs = append(strs, sb.String())
 
-		// Increment the list counter
+		// Move to the next combination
+		// when no wrapping is needed
 		if pos[lastListIndex] != lastListLastIndex {
-			// fmt.Printf("[i=%v] lastListIndex++\n", i)
 			pos[lastListIndex]++
 			continue
 		}
 
-		// Walk backwards and:
-		// 1. Reset positions for lists that have hit the end
-		// 2. Increment the position of the furthest list that has not hit the end
+		// Move to the next combination by
+		// wrapping around from len() to 0
 		for j := lastListIndex; j >= 0; j-- {
-			// fmt.Printf("[i=%v] Check list: %v\n", i, j)
+			// 1. Reset positions for lists that have hit the end
 			if pos[j] != indexes[j] {
 				pos[j]++
 				break
 			}
 
+			// 2. Increment the position of the furthest list that has not hit the end
 			pos[j] = 0
 		}
 	}
