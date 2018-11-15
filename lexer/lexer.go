@@ -60,6 +60,8 @@ func (l *Lexer) charAt(pos int) byte {
 // NextToken …
 func (l *Lexer) NextToken() token.Token {
 	tok := l.readToken()
+	// This line causes the tests to fail
+	// l.currTok = tok
 	return tok
 }
 
