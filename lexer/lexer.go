@@ -68,6 +68,22 @@ func (l *Lexer) pos(pos int) int {
 	return pos
 }
 
+// All Get all tokens present in the byte stream
+func (l *Lexer) All() []token.Token {
+	tokens := make([]token.Token, 0, 64)
+
+	for {
+		tok := l.NextToken()
+		tokens = append(tokens, tok)
+
+		if tok.Type == token.EOF {
+			break
+		}
+	}
+
+	return tokens
+}
+
 // NextToken …
 func (l *Lexer) NextToken() token.Token {
 	l.readToken()
@@ -158,20 +174,17 @@ func (l *Lexer) isSpecialChar(b byte) bool {
 		return true
 	}
 
-	if b == '{' || b == '}' || b == ',' {
-		return true
-	}
-
-	if b == '*' {
-		return true
-	}
-
-	if b == '\\' {
+	// These can appear outside braces and are still considered "operators"
+	if b == '{' || b == '}' || b == '*' || b == '\\' {
 		return true
 	}
 
 	if l.openBraces > 0 {
 		if b == '.' {
+			return true
+		}
+
+		if b == ',' {
 			return true
 		}
 	}

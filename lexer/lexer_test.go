@@ -169,6 +169,12 @@ var testCases = []struct {
 			token.NewToken(token.EOF, 6, 6),
 		},
 	},
+	{
+		input: "a,b",
+		tokens: []token.Token{
+			token.NewToken(token.LITERAL, 0, 3),
+		},
+	},
 }
 
 func TestNextToken(t *testing.T) {
