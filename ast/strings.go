@@ -13,6 +13,8 @@ func (a *AST) nodeToStrings(n Node) ([]string, error) {
 		// do nothing
 	case TypeText:
 		strings = append(strings, string(a.slice(n.Loc)))
+	case TypeWildcard:
+		strings = append(strings, string(a.slice(n.Loc)))
 	case TypeSequence:
 		strs, err := a.perChildStrings(n)
 		if err != nil {

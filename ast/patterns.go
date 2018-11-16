@@ -28,6 +28,8 @@ func (a *AST) nodeToSubpattern(n Node) (string, error) {
 		return "", nil
 	case TypeText:
 		return string(a.slice(n.Loc)), nil
+	case TypeWildcard:
+		return ".*?", nil
 	case TypeSequence:
 		patterns, err := a.perChildSubpatterns(n)
 		if err != nil {

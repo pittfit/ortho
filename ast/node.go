@@ -27,6 +27,14 @@ func TextNode(start int, end int) Node {
 	}
 }
 
+// WildcardNode Create a new wildcard node
+func WildcardNode(start int, end int) Node {
+	return Node{
+		Type: TypeWildcard,
+		Loc:  token.Location{Start: start, End: end},
+	}
+}
+
 // ListNode Create a new list node
 func ListNode(children ...Node) Node {
 	return Node{
@@ -99,6 +107,11 @@ const (
 	// TypeText a literal text string
 	TypeText
 
+	// TypeWildcard a wildcard in the text string
+	// This is just a string of text that
+	// can be considered a wildcard
+	TypeWildcard
+
 	// TypeList an enumeration of possible nodes
 	// When output as a string this produces a
 	// separate string for each child node
@@ -136,6 +149,8 @@ func (t Type) String() string {
 		return "nil"
 	case TypeText:
 		return "text"
+	case TypeWildcard:
+		return "wildcard"
 	case TypeSequence:
 		return "sequence"
 	case TypeList:
