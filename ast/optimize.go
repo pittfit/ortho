@@ -1,7 +1,11 @@
 package ast
 
+import "github.com/pittfit/ortho/tracing"
+
 // Optimize Modifies nodes in the AST to produce a smaller tree with the same semantics
 func (a *AST) Optimize() *AST {
+	defer tracing.End(tracing.Begin("Optimize", ""))
+
 	root := a.Root
 
 	root = root.visit(liftNestedNodes)

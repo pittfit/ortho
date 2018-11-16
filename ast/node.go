@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/pittfit/ortho/token"
+	"github.com/pittfit/ortho/tracing"
 )
 
 // Node A node in the AST
@@ -17,11 +18,15 @@ type Node struct {
 
 // NilNode Create a new blank node
 func NilNode() Node {
+	tracing.Call("NilNode", "")
+
 	return Node{Type: TypeNil}
 }
 
 // TextNode Create a new text node
 func TextNode(start int, end int) Node {
+	tracing.Call("TextNode", "")
+
 	return Node{
 		Type: TypeText,
 		Loc:  token.Location{Start: start, End: end},
@@ -30,6 +35,8 @@ func TextNode(start int, end int) Node {
 
 // WildcardNode Create a new wildcard node
 func WildcardNode(start int, end int) Node {
+	tracing.Call("WildcardNode", "")
+
 	return Node{
 		Type: TypeWildcard,
 		Loc:  token.Location{Start: start, End: end},
@@ -38,6 +45,8 @@ func WildcardNode(start int, end int) Node {
 
 // ListNode Create a new list node
 func ListNode(children ...Node) Node {
+	tracing.Call("ListNode", "")
+
 	return Node{
 		Type:     TypeList,
 		Children: children,
@@ -47,6 +56,8 @@ func ListNode(children ...Node) Node {
 
 // SequenceNode Create a new sequence node
 func SequenceNode(children ...Node) Node {
+	tracing.Call("SequenceNode", "")
+
 	return Node{
 		Type:     TypeSequence,
 		Children: children,
@@ -56,6 +67,8 @@ func SequenceNode(children ...Node) Node {
 
 // ArbitraryRangeNode Create a new range node for ascii characters
 func ArbitraryRangeNode(start Node, end Node) Node {
+	tracing.Call("ArbitraryRangeNode", "")
+
 	children := []Node{start, end}
 
 	return Node{
@@ -67,6 +80,8 @@ func ArbitraryRangeNode(start Node, end Node) Node {
 
 // NumericRangeNode Create a new range node for numeric ranges
 func NumericRangeNode(start Node, end Node, step Node) Node {
+	tracing.Call("NumericRangeNode", "")
+
 	children := []Node{start, end, step}
 
 	return Node{

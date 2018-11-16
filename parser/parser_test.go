@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/pittfit/ortho/ast"
+	"github.com/pittfit/ortho/tracing"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -38,7 +39,10 @@ func TestParse(t *testing.T) {
 	for _, tC := range testCases {
 		t.Run(tC.input, func(t *testing.T) {
 			input := []byte(tC.input)
+
+			tracing.Enable()
 			ast := NewParser(input).Parse()
+			tracing.Disable()
 
 			actual := ast.Root
 			expected := tC.root
