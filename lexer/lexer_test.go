@@ -165,9 +165,7 @@ func TestNextToken(t *testing.T) {
 			input: "{a\\,b}",
 			tokens: []token.Token{
 				token.NewToken(token.BRACE_OPEN, 0, 1),
-				token.NewToken(token.LITERAL, 1, 2),
-				token.NewToken(token.LITERAL, 3, 4),
-				token.NewToken(token.LITERAL, 4, 5),
+				token.NewToken(token.LITERAL, 1, 5),
 				token.NewToken(token.BRACE_CLOSE, 5, 6),
 				token.NewToken(token.EOF, 6, 6),
 			},

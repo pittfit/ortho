@@ -72,7 +72,19 @@ func (l *Lexer) pos(pos int) int {
 func (l *Lexer) NextToken() token.Token {
 	l.readToken()
 
-	return l.currTok
+	tok := l.currTok
+
+	if l.currTok.Type != token.LITERAL {
+		return tok
+	}
+
+	for l.nextTok.Type == token.LITERAL {
+		l.readToken()
+
+		tok.Loc.End = l.currTok.Loc.End
+	}
+
+	return tok
 }
 
 func (l *Lexer) readToken() {
