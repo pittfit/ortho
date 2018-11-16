@@ -29,12 +29,7 @@ func NewToken(typ TokenType, start int, end int) Token {
 }
 
 func (t Token) String() string {
-	switch t.Type {
-	case LITERAL:
-		return fmt.Sprintf("%v(%v:%v)", t.Type.String(), t.Loc.Start, t.Loc.End)
-	default:
-		return t.Type.String()
-	}
+	return fmt.Sprintf("%v(%v:%v)", t.Type.String(), t.Loc.Start, t.Loc.End)
 }
 
 func (t TokenType) String() string {
