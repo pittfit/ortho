@@ -23,10 +23,7 @@ func NilNode() Node {
 func TextNode(start int, end int) Node {
 	return Node{
 		Type: TypeText,
-		Loc: token.Location{
-			Start: start,
-			End:   end,
-		},
+		Loc:  token.Location{Start: start, End: end},
 	}
 }
 
