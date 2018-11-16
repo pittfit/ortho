@@ -184,3 +184,20 @@ func TestNextToken(t *testing.T) {
 		})
 	}
 }
+
+// BenchmarkNextToken
+func BenchmarkNextToken(b *testing.B) {
+	for _, tC := range testCases {
+		b.Run(tC.input, func(b *testing.B) {
+			input := []byte(tC.input)
+
+			for i := 0; i < b.N; i++ {
+				l := NewLexer(input)
+
+				for range tC.tokens {
+					l.NextToken()
+				}
+			}
+		})
+	}
+}
