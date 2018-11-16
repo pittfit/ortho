@@ -32,13 +32,14 @@ func NewLexer(input []byte) *Lexer {
 		currPos:  -1,
 		nextChar: 0,
 	}
+	l.readToken()
 	return l
 }
 
 func (l *Lexer) readChar() {
-	l.prevPos++
-	l.currPos++
-	l.nextPos++
+	l.prevPos = l.pos(l.prevPos + 1)
+	l.currPos = l.pos(l.currPos + 1)
+	l.nextPos = l.pos(l.nextPos + 1)
 
 	l.prevChar = l.charAt(l.prevPos)
 	l.currChar = l.charAt(l.currPos)
@@ -57,25 +58,34 @@ func (l *Lexer) charAt(pos int) byte {
 	return l.input[pos]
 }
 
-// NextToken …
-func (l *Lexer) NextToken() token.Token {
-	tok := l.readToken()
-	// This line causes the tests to fail
-	// l.currTok = tok
-	return tok
+func (l *Lexer) pos(pos int) int {
+	if pos < 0 {
+		return 0
+	} else if pos >= len(l.input) {
+		return len(l.input)
+	}
+
+	return pos
 }
 
-func (l *Lexer) readToken() token.Token {
+// NextToken …
+func (l *Lexer) NextToken() token.Token {
+	l.readToken()
+
+	return l.currTok
+}
+
+func (l *Lexer) readToken() {
 	l.readChar()
 
-	return l.matchToken()
+	l.prevTok, l.currTok, l.nextTok = l.currTok, l.nextTok, l.matchToken()
 }
 
 func (l *Lexer) matchToken() token.Token {
 	var tok token.Token
 
 match:
-	tok.Literal = l.input[l.currPos:l.nextPos]
+	tok.Loc = token.Location{Start: l.currPos, End: l.nextPos}
 
 	switch {
 	case l.inEscape:
@@ -83,7 +93,7 @@ match:
 		l.inEscape = false
 
 		tok.Type = token.LITERAL
-		tok.Literal = l.input[l.currPos:l.nextPos]
+		tok.Loc = token.Location{Start: l.currPos, End: l.nextPos}
 	case l.currChar == '\\':
 		l.inEscape = true
 		goto match
@@ -100,30 +110,27 @@ match:
 	case l.currChar == '*':
 		tok.Type = token.WILDCARD
 	case l.currChar == '.' && l.nextChar == '.' && l.openBraces > 0:
+		start := l.currPos
 		l.readChar()
 
 		tok.Type = token.RANGE_SEPARATOR
-		tok.Literal = l.input[l.prevPos:l.nextPos]
+		tok.Loc = token.Location{Start: start, End: l.nextPos}
 	default:
 		tok.Type = token.LITERAL
-		tok.Literal = l.readLiteral()
+		tok.Loc = l.readLiteral()
 	}
 
 	return tok
 }
 
-func newToken(tokenType token.TokenType, ch byte) token.Token {
-	return token.Token{Type: tokenType, Literal: []byte{ch}}
-}
-
-func (l *Lexer) readLiteral() []byte {
+func (l *Lexer) readLiteral() token.Location {
 	start := l.currPos
 
 	for l.isLiteral(l.nextChar) {
 		l.readChar()
 	}
 
-	return l.input[start:l.nextPos]
+	return token.Location{Start: start, End: l.nextPos}
 }
 
 func (l *Lexer) isLiteral(b byte) bool {
