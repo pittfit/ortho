@@ -9,8 +9,8 @@ func (a *AST) Optimize() *AST {
 	root = root.visit(liftSingleChildSequences)
 
 	return &AST{
-		buf:  a.buf,
-		root: root,
+		input: a.input,
+		root:  root,
 	}
 }
 
