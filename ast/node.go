@@ -3,6 +3,7 @@ package ast
 import (
 	"fmt"
 	"math"
+	"strings"
 
 	"github.com/pittfit/ortho/token"
 )
@@ -159,4 +160,39 @@ func (t Type) String() string {
 		return "range_numeric"
 	}
 	return "unknown"
+}
+
+// String A readable version of the node
+func (n Node) String() string {
+	str := strings.Builder{}
+
+	for _, line := range n.lines() {
+		str.WriteString(line)
+		str.WriteString("\n")
+	}
+
+	return str.String()
+}
+
+// String A readable version of the node
+func (n Node) lines() []string {
+	header := fmt.Sprintf("(%s [%d:%d]", n.Type.String(), n.Loc.Start, n.Loc.End)
+	footer := ")"
+
+	if len(n.Children) == 0 {
+		return []string{fmt.Sprintf("%s%s", header, footer)}
+	}
+
+	lines := []string{}
+	lines = append(lines, header)
+
+	for _, child := range n.Children {
+		for _, line := range child.lines() {
+			lines = append(lines, fmt.Sprintf("\t%s", line))
+		}
+	}
+
+	lines = append(lines, footer)
+
+	return lines
 }
