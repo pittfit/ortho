@@ -27,7 +27,7 @@ func (a *AST) nodeToSubpattern(n Node) (string, error) {
 	case TypeNil:
 		return "", nil
 	case TypeText:
-		return string(a.slice(n.Pos)), nil
+		return string(a.slice(n.Loc)), nil
 	case TypeSequence:
 		patterns, err := a.perChildSubpatterns(n)
 		if err != nil {
@@ -43,7 +43,7 @@ func (a *AST) nodeToSubpattern(n Node) (string, error) {
 
 		return fmt.Sprintf("(%s)", strings.Join(patterns, "|")), nil
 	case TypeRangeNumeric:
-		start, end, step := n.Children[0].Pos, n.Children[1].Pos, n.Children[2].Pos
+		start, end, step := n.Children[0].Loc, n.Children[1].Loc, n.Children[2].Loc
 
 		numericStrs, err := stringsForNumericRange(a.slice(start), a.slice(end), a.slice(step))
 		if err != nil {

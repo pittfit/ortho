@@ -12,7 +12,7 @@ func (a *AST) nodeToStrings(n Node) ([]string, error) {
 	case TypeNil:
 		// do nothing
 	case TypeText:
-		strings = append(strings, string(a.slice(n.Pos)))
+		strings = append(strings, string(a.slice(n.Loc)))
 	case TypeSequence:
 		strs, err := a.perChildStrings(n)
 		if err != nil {
@@ -32,7 +32,7 @@ func (a *AST) nodeToStrings(n Node) ([]string, error) {
 			strings = append(strings, strs...)
 		}
 	case TypeRangeNumeric:
-		start, end, step := n.Children[0].Pos, n.Children[1].Pos, n.Children[2].Pos
+		start, end, step := n.Children[0].Loc, n.Children[1].Loc, n.Children[2].Loc
 
 		numericStrs, err := stringsForNumericRange(a.slice(start), a.slice(end), a.slice(step))
 		if err != nil {

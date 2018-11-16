@@ -21,14 +21,19 @@ const (
 
 // Token
 type Token struct {
-	Type    TokenType
-	Literal []byte
+	Type TokenType
+	Loc  Location
+}
+
+// NewToken …
+func NewToken(typ TokenType, start int, end int) Token {
+	return Token{Type: typ, Loc: Location{Start: start, End: end}}
 }
 
 func (t Token) String() string {
 	switch t.Type {
 	case LITERAL:
-		return fmt.Sprintf("%v(%v)", t.Type.String(), t.Literal)
+		return fmt.Sprintf("%v(%v:%v)", t.Type.String(), t.Loc.Start, t.Loc.End)
 	default:
 		return t.Type.String()
 	}

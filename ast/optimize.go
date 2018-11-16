@@ -46,7 +46,7 @@ func mergeConsecutiveTextNodes(n Node) Node {
 
 	for _, child := range n.Children {
 		if child.Type == TypeText && previousNodeType == TypeText {
-			children[len(children)-1].Pos.End = child.Pos.End
+			children[len(children)-1].Loc.End = child.Loc.End
 		} else {
 			children = append(children, child)
 		}

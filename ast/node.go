@@ -3,12 +3,14 @@ package ast
 import (
 	"fmt"
 	"math"
+
+	"github.com/pittfit/ortho/token"
 )
 
 // Node A node in the AST
 type Node struct {
 	Type     Type
-	Pos      Position
+	Loc      token.Location
 	Children []Node
 }
 
@@ -21,7 +23,7 @@ func NilNode() Node {
 func TextNode(start int, end int) Node {
 	return Node{
 		Type: TypeText,
-		Pos: Position{
+		Loc: token.Location{
 			Start: start,
 			End:   end,
 		},
@@ -33,7 +35,7 @@ func ListNode(children ...Node) Node {
 	return Node{
 		Type:     TypeList,
 		Children: children,
-		Pos:      bounds(children...),
+		Loc:      bounds(children...),
 	}
 }
 
@@ -42,7 +44,7 @@ func SequenceNode(children ...Node) Node {
 	return Node{
 		Type:     TypeSequence,
 		Children: children,
-		Pos:      bounds(children...),
+		Loc:      bounds(children...),
 	}
 }
 
@@ -53,7 +55,7 @@ func ArbitraryRangeNode(start Node, end Node) Node {
 	return Node{
 		Type:     TypeRangeArbitrary,
 		Children: children,
-		Pos:      bounds(children...),
+		Loc:      bounds(children...),
 	}
 }
 
@@ -64,23 +66,23 @@ func NumericRangeNode(start Node, end Node, step Node) Node {
 	return Node{
 		Type:     TypeRangeNumeric,
 		Children: children,
-		Pos:      bounds(children...),
+		Loc:      bounds(children...),
 	}
 }
 
 // Given a list of children return the bounds that
 // would cover all children from start to end
-func bounds(children ...Node) Position {
-	var pos = Position{Start: math.MaxInt64, End: 0}
+func bounds(children ...Node) token.Location {
+	var pos = token.Location{Start: math.MaxInt64, End: 0}
 
 	for _, child := range children {
 		if child.Type != TypeNil {
-			if pos.Start > child.Pos.Start {
-				pos.Start = child.Pos.Start
+			if pos.Start > child.Loc.Start {
+				pos.Start = child.Loc.Start
 			}
 
-			if pos.End < child.Pos.End {
-				pos.End = child.Pos.End
+			if pos.End < child.Loc.End {
+				pos.End = child.Loc.End
 			}
 		}
 	}
@@ -120,12 +122,6 @@ const (
 	TypeRangeArbitrary
 )
 
-// Position The start/end position into the buffer for this node
-type Position struct {
-	Start int
-	End   int
-}
-
 // ID A unique identifier for this node
 // Two separate nodes sharing the same
 // ID mean that when given an identical
@@ -133,7 +129,7 @@ type Position struct {
 // This does NOT mean that two different
 // nodes cannot also produce the same output
 func (n Node) ID() string {
-	return fmt.Sprintf("n_%d_%d_%d", n.Type, n.Pos.Start, n.Pos.End)
+	return fmt.Sprintf("n_%d_%d_%d", n.Type, n.Loc.Start, n.Loc.End)
 }
 
 // String A readable version of the node type
