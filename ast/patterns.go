@@ -2,6 +2,7 @@ package ast
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 )
 
@@ -29,7 +30,7 @@ func (a *AST) nodeToSubpattern(n Node) (string, error) {
 	case TypeNil:
 		return "", nil
 	case TypeText:
-		return string(a.slice(n.Loc)), nil
+		return regexp.QuoteMeta(string(a.slice(n.Loc))), nil
 	case TypeWildcard:
 		return ".*?", nil
 	case TypeSequence:
