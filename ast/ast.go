@@ -4,10 +4,14 @@ import "github.com/pittfit/ortho/token"
 
 // AST …
 type AST struct {
-	input []byte
-	root  Node
+	Input []byte
+	Root  Node
+}
+
+func NewAST(input []byte, root Node) *AST {
+	return &AST{Input: input, Root: root}
 }
 
 func (a *AST) slice(l token.Location) []byte {
-	return a.input[l.Start:l.End]
+	return a.Input[l.Start:l.End]
 }

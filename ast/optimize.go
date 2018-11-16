@@ -2,15 +2,15 @@ package ast
 
 // Optimize Modifies nodes in the AST to produce a smaller tree with the same semantics
 func (a *AST) Optimize() *AST {
-	root := a.root
+	root := a.Root
 
 	root = root.visit(liftNestedNodes)
 	root = root.visit(mergeConsecutiveTextNodes)
 	root = root.visit(liftSingleChildSequences)
 
 	return &AST{
-		input: a.input,
-		root:  root,
+		Input: a.Input,
+		Root:  root,
 	}
 }
 

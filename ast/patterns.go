@@ -1,7 +1,9 @@
 package ast
 
-import "fmt"
-import "strings"
+import (
+	"fmt"
+	"strings"
+)
 
 // PatternOpts
 type PatternOpts struct {
@@ -9,7 +11,7 @@ type PatternOpts struct {
 }
 
 func (a *AST) ToPattern(opts PatternOpts) (string, error) {
-	pattern, err := a.nodeToSubpattern(a.root)
+	pattern, err := a.nodeToSubpattern(a.Root)
 
 	if err != nil {
 		return "", err

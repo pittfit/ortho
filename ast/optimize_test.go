@@ -9,7 +9,7 @@ import (
 // TestOptimize …
 func TestOptimize(t *testing.T) {
 	ast := &AST{
-		root: SequenceNode(
+		Root: SequenceNode(
 			TextNode(0, 2),
 			SequenceNode(
 				TextNode(2, 3),
@@ -35,7 +35,7 @@ func TestOptimize(t *testing.T) {
 	}
 
 	expected := &AST{
-		root: SequenceNode(
+		Root: SequenceNode(
 			TextNode(0, 3),
 			ListNode(
 				TextNode(3, 4),
@@ -57,7 +57,7 @@ func TestOptimize(t *testing.T) {
 // BenchmarkOptimize …
 func BenchmarkOptimize(b *testing.B) {
 	ast := &AST{
-		root: SequenceNode(
+		Root: SequenceNode(
 			TextNode(0, 2),
 			SequenceNode(
 				TextNode(2, 3),

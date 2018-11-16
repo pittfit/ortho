@@ -92,7 +92,7 @@ func TestToStrings(t *testing.T) {
 
 	for _, tt := range testCases {
 		t.Run(tt.desc, func(t *testing.T) {
-			ast := &AST{buf: []byte(tt.str), root: tt.root}
+			ast := &AST{Input: []byte(tt.str), Root: tt.root}
 			actual, err := ast.ToStrings()
 
 			if err != nil {

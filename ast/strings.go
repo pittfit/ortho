@@ -2,7 +2,7 @@ package ast
 
 // ToStrings …
 func (a *AST) ToStrings() ([]string, error) {
-	return a.nodeToStrings(a.root)
+	return a.nodeToStrings(a.Root)
 }
 
 func (a *AST) nodeToStrings(n Node) ([]string, error) {
