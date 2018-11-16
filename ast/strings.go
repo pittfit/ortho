@@ -10,7 +10,7 @@ func (a *AST) nodeToStrings(n Node) ([]string, error) {
 
 	switch n.Type {
 	case TypeNil:
-		// do nothing
+		strings = append(strings, "")
 	case TypeText:
 		strings = append(strings, string(a.slice(n.Loc)))
 	case TypeWildcard:
