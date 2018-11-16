@@ -9,14 +9,12 @@ type TokenType int
 const (
 	INVALID TokenType = iota
 	EOF
-	ESCAPE
 	LITERAL
 	WILDCARD
 	BRACE_OPEN
 	BRACE_CLOSE
 	LIST_SEPARATOR
 	RANGE_SEPARATOR
-	STEP_SEPARATOR
 )
 
 // Token
@@ -57,8 +55,6 @@ func (t TokenType) String() string {
 		return "LIST_SEPARATOR"
 	case RANGE_SEPARATOR:
 		return "RANGE_SEPARATOR"
-	case STEP_SEPARATOR:
-		return "STEP_SEPARATOR"
 	default:
 		return "UNKNOWN"
 	}
