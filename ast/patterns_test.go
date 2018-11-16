@@ -101,6 +101,46 @@ func TestToPattern(t *testing.T) {
 			),
 			expected: "(images|thumbs)/.*?/(0|1|2|3|4|5|6|7|8|9|10)\\.jpg",
 		},
+
+		// Other test cases
+		{
+			desc: "Other 1",
+			str:  "x{52,{55..60}}y",
+			root: SequenceNode(
+				TextNode(0, 1),
+				ListNode(
+					TextNode(2, 4),
+					NumericRangeNode(
+						TextNode(6, 8),
+						TextNode(10, 12),
+						NilNode(),
+					),
+				),
+				TextNode(14, 15),
+			),
+			expected: "x(52|(55|56|57|58|59|60))y",
+		},
+		{
+			desc: "Other 2",
+			str:  "x{52,y{55..60},}z",
+			root: SequenceNode(
+				TextNode(0, 1),
+				ListNode(
+					TextNode(2, 4),
+					SequenceNode(
+						TextNode(5, 6),
+						NumericRangeNode(
+							TextNode(7, 9),
+							TextNode(11, 13),
+							NilNode(),
+						),
+					),
+					NilNode(),
+				),
+				TextNode(16, 17),
+			),
+			expected: "x(52|y(55|56|57|58|59|60)|)z",
+		},
 	}
 
 	for _, tt := range testCases {
