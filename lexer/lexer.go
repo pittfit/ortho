@@ -36,6 +36,11 @@ func NewLexer(input []byte) *Lexer {
 	return l
 }
 
+// Input
+func (l *Lexer) Input() []byte {
+	return l.input
+}
+
 func (l *Lexer) readChar() {
 	l.prevPos = l.pos(l.prevPos + 1)
 	l.currPos = l.pos(l.currPos + 1)
