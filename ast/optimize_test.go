@@ -83,6 +83,6 @@ func BenchmarkOptimize(b *testing.B) {
 	}
 
 	for n := 0; n < b.N; n++ {
-		_ = ast.Optimize()
+		ast.Optimize()
 	}
 }
