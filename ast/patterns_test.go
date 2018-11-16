@@ -85,18 +85,21 @@ func TestToPattern(t *testing.T) {
 			desc: "Wildcard nodes",
 			str:  "{images,thumbs}/*/{0..10}.jpg",
 			root: SequenceNode(
-				TextNode(0, 2),
 				ListNode(
-					TextNode(3, 4),
-					TextNode(6, 7),
-					NumericRangeNode(
-						TextNode(9, 10),
-						TextNode(12, 13),
-						TextNode(15, 16),
-					),
+					TextNode(1, 7),
+					TextNode(8, 14),
 				),
+				TextNode(15, 16),
+				WildcardNode(16, 17),
+				TextNode(17, 18),
+				NumericRangeNode(
+					TextNode(19, 20),
+					TextNode(22, 24),
+					NilNode(),
+				),
+				TextNode(25, 29),
 			),
-			expected: "ab(c|d|(0|2|4|6))",
+			expected: "(images|thumbs)/.*?/(0|1|2|3|4|5|6|7|8|9|10)\\.jpg",
 		},
 	}
 
