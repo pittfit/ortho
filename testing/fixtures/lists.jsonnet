@@ -81,6 +81,29 @@
     ],
   },
   {
+    "input": "{ab,c}",
+    "tokens": [
+      "BRACE_OPEN",
+      "LITERAL",
+      "LIST_SEPARATOR",
+      "LITERAL",
+      "BRACE_CLOSE",
+      "EOF",
+    ],
+    "ast": |||
+      (list [1:5]
+        (text [1:3])
+        (text [4:5])
+      )
+    |||,
+    "output": [
+      {
+        "pattern": "(ab|c)",
+        "strings": ["ab", "c"],
+      },
+    ],
+  },
+  {
     "input": "{a,b,}",
     "tokens": [
       "BRACE_OPEN",
