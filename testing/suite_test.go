@@ -58,10 +58,6 @@ func Test(t *testing.T) {
 	}
 }
 
-func testOutput(t *testing.T, fx fixture) {
-	assert.Equal(t, true, true)
-}
-
 func tokenTypes(toks []token.Token) []string {
 	types := []string{}
 	for _, tok := range toks {
