@@ -6,7 +6,7 @@ func (a *AST) ToStrings() ([]string, error) {
 }
 
 func (a *AST) nodeToStrings(n Node) ([]string, error) {
-	var strings []string
+	var strings = []string{}
 
 	switch n.Type {
 	case TypeNil:

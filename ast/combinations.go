@@ -7,6 +7,11 @@ import (
 func combinations(lists [][]string) []string {
 	listCount := len(lists)
 
+	// No lists provided
+	if listCount == 0 {
+		return []string{}
+	}
+
 	pos := make([]int, listCount)
 	indexes := make([]int, listCount)
 	iterations := 1
@@ -27,7 +32,7 @@ func combinations(lists [][]string) []string {
 	lastListIndex := listCount - 1
 	lastListLastIndex := indexes[lastListIndex]
 
-	var strs []string
+	var strs = []string{}
 	var sb strings.Builder
 
 	for i := 0; i < iterations; i++ {
