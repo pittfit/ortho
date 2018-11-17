@@ -14,7 +14,7 @@ var fixtureFiles = []string{
 }
 
 type fixture struct {
-	Input  string          `json:"input",string`
+	Input  string          `json:"input"`
 	Tokens []string        `json:"tokens"`
 	Ast    string          `json:"ast"`
 	Output []fixtureOutput `json:"output"`
