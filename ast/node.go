@@ -94,7 +94,11 @@ func NumericRangeNode(start Node, end Node, step Node) Node {
 // Given a list of children return the bounds that
 // would cover all children from start to end
 func bounds(children ...Node) token.Location {
-	var pos = token.Location{Start: math.MaxInt64, End: 0}
+	if len(children) == 0 {
+		return token.Location{}
+	}
+
+	pos := children[0].Loc
 
 	for _, child := range children {
 		if child.Type != TypeNil {
