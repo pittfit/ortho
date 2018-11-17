@@ -10,6 +10,7 @@ import (
 
 var fixtureFiles = []string{
 	"lists",
+	"ranges",
 }
 
 type fixture struct {
