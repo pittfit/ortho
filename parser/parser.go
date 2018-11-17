@@ -100,6 +100,7 @@ func (p *Parser) parseSubExpr() ast.Node {
 
 		if p.currTok.Type == token.LITERAL && p.nextTok.Type == token.RANGE_SEPARATOR {
 			// This token will be consumed by p.parseRange()
+			p.readToken()
 			continue
 		}
 
