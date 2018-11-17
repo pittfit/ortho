@@ -1,7 +1,6 @@
 package testing
 
 import (
-	"fmt"
 	"os"
 	"strings"
 	"testing"
@@ -35,8 +34,6 @@ func Test(t *testing.T) {
 
 			actual := strings.Split(strings.TrimSpace(nodeFormatter.ToString(parsedAst.Root)), "\n")
 			expected := strings.Split(strings.TrimSpace(fx.Ast), "\n")
-
-			fmt.Printf("%v", strings.Join(actual, "\n"))
 
 			assert.Equal(t, expected, actual, "Unexpected generated AST")
 
