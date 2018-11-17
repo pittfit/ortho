@@ -25,6 +25,11 @@ func Enable() {
 	enabled = true
 }
 
+// EnableIf …
+func EnableIf(condition bool) {
+	enabled = condition
+}
+
 // Disable …
 func Disable() {
 	enabled = false

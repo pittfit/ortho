@@ -20,6 +20,7 @@ type Parser struct {
 // NewParser
 func NewParser(input []byte) *Parser {
 	defer tracing.End(tracing.Begin("NewParser", ""))
+	tracing.Debug("Input", string(input))
 
 	p := &Parser{
 		l: lexer.NewLexer(input),
@@ -43,7 +44,44 @@ func (p *Parser) readToken() {
 func (p *Parser) Parse() *ast.AST {
 	defer tracing.End(tracing.Begin("parse", ""))
 
-	return ast.NewAST(p.l.Input(), p.parseSubExpr()).Optimize()
+	// Top-level parsing continues until EOF
+	nodes := []ast.Node{}
+
+	for p.currTok.Type != token.EOF {
+		nodes = append(nodes, p.parseToken())
+
+		p.readToken()
+	}
+
+	return ast.NewAST(p.l.Input(), ast.SequenceNode(nodes...)).Optimize()
+}
+
+func (p *Parser) parseToken() ast.Node {
+	defer tracing.End(tracing.Begin("parseToken", ""))
+
+	start, end := p.currTok.Loc.Start, p.currTok.Loc.End
+
+	if p.currTok.Type == token.BRACE_OPEN {
+		return p.parseSubExpr()
+	}
+
+	if p.currTok.Type == token.LITERAL {
+		return ast.TextNode(start, end)
+	}
+
+	if p.currTok.Type == token.WILDCARD {
+		return ast.WildcardNode(start, end)
+	}
+
+	if p.currTok.Type == token.RANGE_SEPARATOR {
+		return p.parseRange()
+	}
+
+	if p.currTok.Type == token.LIST_SEPARATOR {
+		return p.parseListItem()
+	}
+
+	panic("Unexpected token " + p.currTok.Type.String())
 }
 
 func (p *Parser) parseSubExpr() ast.Node {
@@ -55,41 +93,38 @@ func (p *Parser) parseSubExpr() ast.Node {
 	for p.currTok.Type != token.EOF && p.currTok.Type != token.BRACE_CLOSE {
 		p.readToken()
 
-		start, end := p.currTok.Loc.Start, p.currTok.Loc.End
+		if p.prevTok.Type == token.LIST_SEPARATOR && p.currTok.Type == token.BRACE_OPEN {
+			nodes = append(nodes, ast.NilNode())
+		}
 
-		if p.currTok.Type == token.BRACE_OPEN {
-			if p.prevTok.Type == token.LIST_SEPARATOR {
-				nodes = append(nodes, ast.NilNode())
-			}
-
-			nodes = append(nodes, p.parseSubExpr())
-		} else if p.currTok.Type == token.LITERAL {
+		if p.currTok.Type == token.LITERAL && p.nextTok.Type == token.RANGE_SEPARATOR {
 			// This token will be consumed by p.parseRange()
-			if p.nextTok.Type == token.RANGE_SEPARATOR {
-				continue
-			}
+			continue
+		}
 
-			nodes = append(nodes, ast.TextNode(start, end))
-		} else if p.currTok.Type == token.WILDCARD {
-			nodes = append(nodes, ast.WildcardNode(start, end))
-		} else if p.currTok.Type == token.RANGE_SEPARATOR {
-			nodes = append(nodes, p.parseRange())
-		} else if p.currTok.Type == token.LIST_SEPARATOR {
+		if p.currTok.Type == token.LIST_SEPARATOR && !isList {
 			// We've hit the first list separator
 			// Lift the already parsed nodes into a sequence
-			if !isList {
-				isList = true
+			isList = true
 
-				if len(nodes) > 0 {
-					nodes = []ast.Node{ast.SequenceNode(nodes...)}
-				}
+			if len(nodes) > 0 {
+				nodes = []ast.Node{ast.SequenceNode(nodes...)}
 			}
+		}
 
-			if p.prevTok.Type == token.BRACE_OPEN {
-				nodes = append(nodes, ast.NilNode())
-			}
+		if p.prevTok.Type == token.BRACE_OPEN && p.currTok.Type == token.LIST_SEPARATOR {
+			nodes = append(nodes, ast.NilNode())
+		}
 
-			nodes = append(nodes, p.parseListItem())
+		if p.currTok.Type == token.BRACE_OPEN {
+		} else if p.currTok.Type == token.LITERAL {
+			nodes = append(nodes, p.parseToken())
+		} else if p.currTok.Type == token.WILDCARD {
+			nodes = append(nodes, p.parseToken())
+		} else if p.currTok.Type == token.RANGE_SEPARATOR {
+			nodes = append(nodes, p.parseToken())
+		} else if p.currTok.Type == token.LIST_SEPARATOR {
+			nodes = append(nodes, p.parseToken())
 		}
 	}
 
