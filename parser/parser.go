@@ -49,8 +49,6 @@ func (p *Parser) Parse() *ast.AST {
 
 	for p.currTok.Type != token.EOF {
 		nodes = append(nodes, p.parseToken())
-
-		p.readToken()
 	}
 
 	return ast.NewAST(p.l.Input(), ast.SequenceNode(nodes...)).Optimize()
@@ -62,14 +60,17 @@ func (p *Parser) parseToken() ast.Node {
 	start, end := p.currTok.Loc.Start, p.currTok.Loc.End
 
 	if p.currTok.Type == token.BRACE_OPEN {
+		defer p.readToken()
 		return p.parseSubExpr()
 	}
 
 	if p.currTok.Type == token.LITERAL {
+		defer p.readToken()
 		return ast.TextNode(start, end)
 	}
 
 	if p.currTok.Type == token.WILDCARD {
+		defer p.readToken()
 		return ast.WildcardNode(start, end)
 	}
 
@@ -84,6 +85,7 @@ func (p *Parser) parseToken() ast.Node {
 	}
 
 	if p.currTok.Type == token.LIST_SEPARATOR {
+		defer p.readToken()
 		return p.parseListItem()
 	}
 
@@ -125,8 +127,6 @@ func (p *Parser) parseSubExpr() ast.Node {
 		}
 
 		nodes = append(nodes, p.parseToken())
-
-		p.readToken()
 	}
 
 	if isList {
