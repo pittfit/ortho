@@ -74,7 +74,13 @@ func (p *Parser) parseToken() ast.Node {
 	}
 
 	if p.currTok.Type == token.RANGE_SEPARATOR {
-		return p.parseRange()
+		node := p.parseRange()
+
+		if node.Type == ast.TypeRangeNumeric {
+			return node
+		}
+
+		panic("Unable to parse range")
 	}
 
 	if p.currTok.Type == token.LIST_SEPARATOR {
