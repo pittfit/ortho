@@ -9,7 +9,7 @@ import (
 )
 
 var fixtureFiles = []string{
-	"one",
+	"lists",
 }
 
 type fixture struct {
