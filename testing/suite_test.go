@@ -23,7 +23,7 @@ func Test(t *testing.T) {
 	}
 
 	for _, fx := range fixtures {
-		t.Run("", func(t *testing.T) {
+		t.Run(fx.Input, func(t *testing.T) {
 			// Test the lexer
 			l := lexer.NewLexer([]byte(fx.Input))
 			assert.Equal(t, fx.Tokens, tokenTypes(l.All()), "Unexpected tokens")
