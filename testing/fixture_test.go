@@ -12,6 +12,7 @@ var fixtureFiles = []string{
 	"lists",
 	"ranges",
 	"pathlike",
+	"other",
 }
 
 type fixture struct {
