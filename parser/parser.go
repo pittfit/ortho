@@ -90,9 +90,10 @@ func (p *Parser) parseSubExpr() ast.Node {
 	nodes := []ast.Node{}
 	isList := false
 
-	for p.currTok.Type != token.EOF && p.currTok.Type != token.BRACE_CLOSE {
-		p.readToken()
+	// Consume the opening brace
+	p.readToken()
 
+	for p.currTok.Type != token.EOF && p.currTok.Type != token.BRACE_CLOSE {
 		if p.prevTok.Type == token.LIST_SEPARATOR && p.currTok.Type == token.BRACE_OPEN {
 			nodes = append(nodes, ast.NilNode())
 		}
@@ -116,16 +117,9 @@ func (p *Parser) parseSubExpr() ast.Node {
 			nodes = append(nodes, ast.NilNode())
 		}
 
-		if p.currTok.Type == token.BRACE_OPEN {
-		} else if p.currTok.Type == token.LITERAL {
-			nodes = append(nodes, p.parseToken())
-		} else if p.currTok.Type == token.WILDCARD {
-			nodes = append(nodes, p.parseToken())
-		} else if p.currTok.Type == token.RANGE_SEPARATOR {
-			nodes = append(nodes, p.parseToken())
-		} else if p.currTok.Type == token.LIST_SEPARATOR {
-			nodes = append(nodes, p.parseToken())
-		}
+		nodes = append(nodes, p.parseToken())
+
+		p.readToken()
 	}
 
 	if isList {
