@@ -33,6 +33,14 @@ var testCases = []struct {
 		input: "{a,b,}",
 		root:  ast.ListNode(ast.TextNode(1, 2), ast.TextNode(3, 4), ast.NilNode()),
 	},
+	{
+		input: "{0..10}",
+		root:  ast.NumericRangeNode(ast.TextNode(1, 2), ast.TextNode(4, 6), ast.NilNode()),
+	},
+	{
+		input: "{0..10..02}",
+		root:  ast.NumericRangeNode(ast.TextNode(1, 2), ast.TextNode(4, 6), ast.TextNode(8, 10)),
+	},
 }
 
 func TestParse(t *testing.T) {

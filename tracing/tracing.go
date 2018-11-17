@@ -53,6 +53,11 @@ func Call(id, extra string) {
 	print("CALL", id, extra)
 }
 
+// Debug …
+func Debug(id, extra string) {
+	print("DEBUG", id, extra)
+}
+
 // End …
 func End(id, extra string) {
 	dec()
