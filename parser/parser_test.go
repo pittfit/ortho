@@ -1,7 +1,6 @@
 package parser
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/pittfit/ortho/ast"
@@ -54,9 +53,6 @@ func TestParse(t *testing.T) {
 
 			actual := ast.Root
 			expected := tC.root
-
-			fmt.Printf("%v", actual.String())
-			fmt.Printf("%v", expected.String())
 
 			assert.Equal(t, expected.String(), actual.String())
 		})
