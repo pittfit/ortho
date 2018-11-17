@@ -11,6 +11,7 @@ import (
 var fixtureFiles = []string{
 	"lists",
 	"ranges",
+	"pathlike",
 }
 
 type fixture struct {
