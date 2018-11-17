@@ -36,6 +36,102 @@
     ],
   },
   {
+    "input": "{a,}",
+    "tokens": [
+      "BRACE_OPEN",
+      "LITERAL",
+      "LIST_SEPARATOR",
+      "BRACE_CLOSE",
+      "EOF",
+    ],
+    "ast": |||
+      (list [0:2]
+        (text [1:2])
+        (nil [0:0])
+      )
+    |||,
+    "output": [
+      {
+        "pattern": "(a|)",
+        "strings": ["a", ""],
+      },
+    ],
+  },
+  {
+    "input": "{a,b}",
+    "tokens": [
+      "BRACE_OPEN",
+      "LITERAL",
+      "LIST_SEPARATOR",
+      "LITERAL",
+      "BRACE_CLOSE",
+      "EOF",
+    ],
+    "ast": |||
+      (list [1:4]
+        (text [1:2])
+        (text [3:4])
+      )
+    |||,
+    "output": [
+      {
+        "pattern": "(a|b)",
+        "strings": ["a", "b"],
+      },
+    ],
+  },
+  {
+    "input": "{a,b,}",
+    "tokens": [
+      "BRACE_OPEN",
+      "LITERAL",
+      "LIST_SEPARATOR",
+      "LITERAL",
+      "LIST_SEPARATOR",
+      "BRACE_CLOSE",
+      "EOF",
+    ],
+    "ast": |||
+      (list [0:4]
+        (text [1:2])
+        (text [3:4])
+        (nil [0:0])
+      )
+    |||,
+    "output": [
+      {
+        "pattern": "(a|b|)",
+        "strings": ["a", "b", ""],
+      },
+    ],
+  },
+  {
+    "input": "{a,b,c}",
+    "tokens": [
+      "BRACE_OPEN",
+      "LITERAL",
+      "LIST_SEPARATOR",
+      "LITERAL",
+      "LIST_SEPARATOR",
+      "LITERAL",
+      "BRACE_CLOSE",
+      "EOF",
+    ],
+    "ast": |||
+      (list [1:6]
+        (text [1:2])
+        (text [3:4])
+        (text [5:6])
+      )
+    |||,
+    "output": [
+      {
+        "pattern": "(a|b|c)",
+        "strings": ["a", "b", "c"],
+      },
+    ],
+  },
+  {
     "input": "a{2,1}b{X,Y,X}c",
     "tokens": [
       "LITERAL",
