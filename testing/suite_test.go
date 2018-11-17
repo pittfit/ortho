@@ -58,6 +58,52 @@ func Test(t *testing.T) {
 	}
 }
 
+func Benchmark(b *testing.B) {
+	fixtures, err := loadFixtures()
+	if err != nil {
+		b.Error(err)
+	}
+
+	for _, fx := range fixtures {
+		// Benchmark the lexer
+		b.Run(fx.Input+"/Lexer", func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				lexer.NewLexer([]byte(fx.Input)).All()
+			}
+		})
+
+		// Benchmark the parser
+		b.Run(fx.Input+"/Parser", func(b *testing.B) {
+			// Test the AST
+			for i := 0; i < b.N; i++ {
+				parser.NewParser([]byte(fx.Input)).Parse()
+			}
+		})
+
+		// Pattern production
+		b.Run(fx.Input+"/Pattern", func(b *testing.B) {
+			parsedAst := parser.NewParser([]byte(fx.Input)).Parse()
+
+			for range fx.Output {
+				for i := 0; i < b.N; i++ {
+					parsedAst.ToPattern(ast.PatternOpts{Anchored: false})
+				}
+			}
+		})
+
+		// Strings production
+		b.Run(fx.Input+"/Strings", func(b *testing.B) {
+			parsedAst := parser.NewParser([]byte(fx.Input)).Parse()
+
+			for range fx.Output {
+				for i := 0; i < b.N; i++ {
+					parsedAst.ToStrings()
+				}
+			}
+		})
+	}
+}
+
 func tokenTypes(toks []token.Token) []string {
 	types := []string{}
 	for _, tok := range toks {
