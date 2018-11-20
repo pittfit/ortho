@@ -12,47 +12,6 @@ var testCases = []struct {
 	tokens []token.Token
 }{
 	{
-		input: "{,}",
-		tokens: []token.Token{
-			token.NewToken(token.BRACE_OPEN, 0, 1),
-			token.NewToken(token.LIST_SEPARATOR, 1, 2),
-			token.NewToken(token.BRACE_CLOSE, 2, 3),
-			token.NewToken(token.EOF, 3, 3),
-		},
-	},
-	{
-		input: "{a,}",
-		tokens: []token.Token{
-			token.NewToken(token.BRACE_OPEN, 0, 1),
-			token.NewToken(token.LITERAL, 1, 2),
-			token.NewToken(token.LIST_SEPARATOR, 2, 3),
-			token.NewToken(token.BRACE_CLOSE, 3, 4),
-			token.NewToken(token.EOF, 4, 4),
-		},
-	},
-	{
-		input: "{ab,c}",
-		tokens: []token.Token{
-			token.NewToken(token.BRACE_OPEN, 0, 1),
-			token.NewToken(token.LITERAL, 1, 3),
-			token.NewToken(token.LIST_SEPARATOR, 3, 4),
-			token.NewToken(token.LITERAL, 4, 5),
-			token.NewToken(token.BRACE_CLOSE, 5, 6),
-			token.NewToken(token.EOF, 6, 6),
-		},
-	},
-	{
-		input: "{1..10}",
-		tokens: []token.Token{
-			token.NewToken(token.BRACE_OPEN, 0, 1),
-			token.NewToken(token.LITERAL, 1, 2),
-			token.NewToken(token.RANGE_SEPARATOR, 2, 4),
-			token.NewToken(token.LITERAL, 4, 6),
-			token.NewToken(token.BRACE_CLOSE, 6, 7),
-			token.NewToken(token.EOF, 7, 7),
-		},
-	},
-	{
 		input: "{1...10}",
 		tokens: []token.Token{
 			token.NewToken(token.BRACE_OPEN, 0, 1),
@@ -167,12 +126,6 @@ var testCases = []struct {
 			token.NewToken(token.LITERAL, 1, 5),
 			token.NewToken(token.BRACE_CLOSE, 5, 6),
 			token.NewToken(token.EOF, 6, 6),
-		},
-	},
-	{
-		input: "a,b",
-		tokens: []token.Token{
-			token.NewToken(token.LITERAL, 0, 3),
 		},
 	},
 }

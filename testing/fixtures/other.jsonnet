@@ -1,5 +1,23 @@
 [
   {
+    "input": "a,b",
+    "tokens": [
+      "LITERAL",
+      "EOF",
+    ],
+    "ast": |||
+      (text [0:3])
+    |||,
+    "output": [
+      {
+        "pattern": "a,b",
+        "strings": [
+          "a,b",
+        ],
+      },
+    ],
+  },
+  {
     "input": "x{a,b}y",
     "tokens": [
       "LITERAL",
