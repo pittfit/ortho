@@ -11,15 +11,12 @@ type Lexer struct {
 	inEscape   bool
 	openBraces int
 
-	prevPos int
 	currPos int
 	nextPos int
 
-	prevChar byte
 	currChar byte
 	nextChar byte
 
-	prevTok token.Token
 	currTok token.Token
 	nextTok token.Token
 }
@@ -28,7 +25,6 @@ type Lexer struct {
 func NewLexer(input []byte) *Lexer {
 	l := &Lexer{
 		input:    input,
-		prevPos:  -2,
 		currPos:  -1,
 		nextChar: 0,
 	}
@@ -42,15 +38,11 @@ func (l *Lexer) Input() []byte {
 }
 
 func (l *Lexer) readChar() {
-	l.prevPos = l.pos(l.prevPos + 1)
 	l.currPos = l.pos(l.currPos + 1)
 	l.nextPos = l.pos(l.nextPos + 1)
 
-	l.prevChar = l.charAt(l.prevPos)
 	l.currChar = l.charAt(l.currPos)
 	l.nextChar = l.charAt(l.nextPos)
-
-	// fmt.Printf("readChar {%v, %v, %v}\n", l.prevPos, l.currPos, l.nextPos)
 }
 
 func (l *Lexer) charAt(pos int) byte {
@@ -111,7 +103,7 @@ func (l *Lexer) NextToken() token.Token {
 func (l *Lexer) readToken() {
 	l.readChar()
 
-	l.prevTok, l.currTok, l.nextTok = l.currTok, l.nextTok, l.matchToken()
+	l.currTok, l.nextTok = l.nextTok, l.matchToken()
 }
 
 func (l *Lexer) matchToken() token.Token {
