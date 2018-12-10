@@ -1,6 +1,8 @@
 package lexer
 
 import (
+	"unicode/utf8"
+
 	"github.com/pittfit/ortho/token"
 )
 
@@ -13,9 +15,10 @@ type Lexer struct {
 
 	currPos int
 	nextPos int
+	readPos int
 
-	currChar byte
-	nextChar byte
+	currChar rune
+	nextChar rune
 
 	currTok token.Token
 	nextTok token.Token
@@ -38,11 +41,16 @@ func (l *Lexer) Input() []byte {
 }
 
 func (l *Lexer) readChar() {
-	l.currPos = l.pos(l.currPos + 1)
-	l.nextPos = l.pos(l.nextPos + 1)
+	if l.readPos < len(l.input) {
+		l.currPos = l.readPos
 
-	l.currChar = l.charAt(l.currPos)
-	l.nextChar = l.charAt(l.nextPos)
+		r, w := utf8.DecodeRune(l.input[l.readPos:])
+		l.currChar = r
+
+		l.readPos += w
+	} else {
+		l.currChar = 0
+	}
 }
 
 func (l *Lexer) charAt(pos int) byte {
@@ -158,11 +166,11 @@ func (l *Lexer) readLiteral() token.Location {
 	return token.Location{Start: start, End: l.nextPos}
 }
 
-func (l *Lexer) isLiteral(b byte) bool {
+func (l *Lexer) isLiteral(b rune) bool {
 	return !l.isSpecialChar(b)
 }
 
-func (l *Lexer) isSpecialChar(b byte) bool {
+func (l *Lexer) isSpecialChar(b rune) bool {
 	if l.inEscape {
 		return false
 	}
