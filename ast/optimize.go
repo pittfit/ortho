@@ -11,6 +11,7 @@ func (a *AST) Optimize() *AST {
 	root = root.visit(liftNestedNodes)
 	root = root.visit(mergeConsecutiveTextNodes)
 	root = root.visit(liftSingleChildSequences)
+	root = root.visit(removeNodesWithNoChildren)
 
 	return &AST{
 		Input: a.Input,
@@ -73,4 +74,22 @@ func liftSingleChildSequences(n Node) Node {
 	}
 
 	return n.Children[0]
+}
+
+func removeNodesWithNoChildren(n Node) Node {
+	children := []Node{}
+
+	for _, child := range n.Children {
+		if child.Type == TypeSequence || child.Type == TypeList {
+			if len(child.Children) == 0 {
+				continue
+			}
+		}
+
+		children = append(children, child)
+	}
+
+	n.Children = children
+
+	return n
 }
